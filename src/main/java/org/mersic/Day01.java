@@ -22,14 +22,14 @@ public class Day01 {
         Collections.sort(l1);
         Collections.sort(l2);
 
-        int sumDistance = getSumDistance(l1, l2);
-        int sumSimScore = getSumSimScore(l1, l2);
+        int sumDistance = getPartOneSumDistance(l1, l2);
+        int sumSimScore = getPartTwoSumSimScore(l1, l2);
 
         System.out.println("Day 1 part 1: " + sumDistance);
         System.out.println("Day 1 part 2: " + sumSimScore);
     }
 
-    private static int getSumSimScore(List<Integer> l1, List<Integer> l2) {
+    private static int getPartTwoSumSimScore(List<Integer> l1, List<Integer> l2) {
         int sumSimScore = 0;
         int j = 0;
         for (int i = 0; i < l1.size();) {
@@ -53,14 +53,10 @@ public class Day01 {
         return sumSimScore;
     }
 
-    private static int getSumDistance(List<Integer> l1, List<Integer> l2) {
+    private static int getPartOneSumDistance(List<Integer> l1, List<Integer> l2) {
         int sumDistance = 0;
         for (int i = 0; i < l1.size(); i++) {
-            int d = l1.get(i) - l2.get(i);
-            if (d < 0) {
-                d *= -1;
-            }
-            sumDistance += d;
+            sumDistance += Math.abs(l1.get(i) - l2.get(i));
         }
         return sumDistance;
     }
