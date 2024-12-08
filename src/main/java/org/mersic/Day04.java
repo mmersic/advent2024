@@ -7,7 +7,7 @@ import java.util.List;
 public class Day04 {
     
     //XMAS in any orientation
-    public static int partOneXmasAt(char[][] grid, int y, int x, int xlen, int ylen) {
+    public static int partOneXmasAt(char[][] grid, int y, int x) {
         int xmasCount = 0;
         
         try {
@@ -73,7 +73,7 @@ public class Day04 {
     }
 
     public static void main(String[] args) throws Exception {
-        List<String> lines = Files.readAllLines(Path.of(Day02.class.getClassLoader().getResource("day.04.input").toURI()));
+        List<String> lines = Files.readAllLines(Path.of(Day04.class.getClassLoader().getResource("day.04.input").toURI()));
         char[][] grid = new char[lines.size()][lines.getFirst().length()];
         
         int xlen = lines.getFirst().length();
@@ -88,7 +88,7 @@ public class Day04 {
         int partTwoXmasCount = 0;
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                partOneXmasCount += partOneXmasAt(grid, i, j, xlen, ylen);
+                partOneXmasCount += partOneXmasAt(grid, i, j);
                 partTwoXmasCount += partTwoXmasAt(grid, i, j);
             }
         }
