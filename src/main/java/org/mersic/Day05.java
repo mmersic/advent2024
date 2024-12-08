@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Day05 {
 
@@ -30,41 +31,30 @@ public class Day05 {
         }
     }
     
-    public static int[] reOrderSort(Map<Integer, Set<Integer>> map, int[] pages) {
-        List<Integer> list = new ArrayList<>(Arrays.stream(pages).boxed().toList());
-
-        list.sort(new PageComparator(map));
-        
-        for (int i = 0; i < pages.length; i++) {
-            pages[i] = list.get(i);
-        }
-        
-        return pages;
-    }
-
     private static final Set<Integer> emptySet = new LinkedHashSet<>();
-    private static boolean valid(Map<Integer, Set<Integer>> map, int[] pages) {
-        for (int i = 0; i < pages.length-1; i++) {
-            if (!map.getOrDefault(pages[i], emptySet).contains(pages[i+1])) {
+    private static boolean valid(Map<Integer, Set<Integer>> map, List<Integer> pages) {
+        for (int i = 0; i < pages.size()-1; i++) {
+            if (!map.getOrDefault(pages.get(i), emptySet).contains(pages.get(i+1))) {
                 return false;
             }
         }
         return true;
     }
 
-    public static int partOneMiddle(Map<Integer, Set<Integer>> map, int[] pages) {
+    public static int partOneMiddle(Map<Integer, Set<Integer>> map, List<Integer> pages) {
         if (valid(map, pages)) {
-            return pages[pages.length/2];
+            return pages.get(pages.size()/2);
         } else {
             return 0;
         }
     }
 
-    public static int partTwoMiddle(Map<Integer, Set<Integer>> map, int[] pages) {
+    public static int partTwoMiddle(Map<Integer, Set<Integer>> map, List<Integer> pages) {
         if (valid(map, pages)) {
             return 0;
         } else {
-            return reOrderSort(map, pages)[pages.length/2];
+            pages.sort(new PageComparator(map));
+            return pages.get(pages.size()/2);
         }
     }
     
@@ -87,7 +77,7 @@ public class Day05 {
         int partOneSum = 0;
         int partTwoSum = 0;
         for (String pageString : pageSection) {
-            int[] pages = Arrays.stream(pageString.split(",")).mapToInt(Integer::parseInt).toArray();
+            List<Integer> pages = Arrays.stream(pageString.split(",")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
             partOneSum += partOneMiddle(map, pages);
             partTwoSum += partTwoMiddle(map, pages);
         }
