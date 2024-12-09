@@ -59,13 +59,32 @@ public class Day06 {
     }
 
     private static boolean isLoop(char[][] grid, int x, int y) {
-        int posCount = 0;
         char facing = 'U';
-        int MAX_POS_COUNT = 10000;
-        while(posCount < MAX_POS_COUNT) {
-            posCount++;
-            if (grid[y][x] != 'X') {
-                grid[y][x] = 'X';
+        while (true) {
+            switch (grid[y][x]) {
+                case '^':
+                case '.': {
+                    grid[y][x] = 'X';
+                }
+                case 'X': {
+                    grid[y][x] = 'Y';
+                    break;
+                }
+                case 'Y': {
+                    grid[y][x] = 'Z';
+                    break;
+                }
+                case 'Z': {
+                    grid[y][x] = 'A';
+                    break;
+                }
+                case 'A': {
+                    grid[y][x] = 'B';
+                    break;
+                }
+                case 'B': {
+                    return true;
+                }
             }
             try {
                 switch (facing) {
@@ -103,11 +122,9 @@ public class Day06 {
                     }
                 }
             } catch (Exception e) {
-                break;
+                return false;
             }
         }
-        
-        return posCount >= MAX_POS_COUNT;
     }
     
     private static int loopCount(char[][] grid, int x, int y) {
@@ -119,7 +136,7 @@ public class Day06 {
                 for (int k = 0; k < grid.length; k++) {
                     gridCopy[k] = grid[k].clone();
                 }
-                if (grid[i][j] == '.') {
+                if (grid[i][j] == 'X') {
                     gridCopy[i][j] = '#';
                 } else {
                     continue;
@@ -138,19 +155,17 @@ public class Day06 {
         
         int x = -1;
         int y = -1;
-        char[][] gridPartOne = new char[input.size()][input.getFirst().length()];
-        char[][] gridPartTwo = new char[input.size()][input.getFirst().length()];
+        char[][] grid = new char[input.size()][input.getFirst().length()];
         for (int i = 0; i < input.size(); i++) {
-            gridPartOne[i] = input.get(i).toCharArray();
-            gridPartTwo[i] = input.get(i).toCharArray();
+            grid[i] = input.get(i).toCharArray();
             if (input.get(i).indexOf('^') > -1) {
                 x = input.get(i).indexOf('^');
                 y = i;
             }
         }
 
-        int partOne = walk(gridPartOne, x, y);
-        int partTwo = loopCount(gridPartTwo, x, y);
+        int partOne = walk(grid, x, y);
+        int partTwo = loopCount(grid, x, y);
         
         System.out.println("Day 6 part 1: " + partOne);
         System.out.println("Day 6 part 2: " + partTwo);
