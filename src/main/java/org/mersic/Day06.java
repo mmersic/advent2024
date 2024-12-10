@@ -59,65 +59,62 @@ public class Day06 {
     }
 
     private static boolean isLoop(char[][] grid, int x, int y) {
-        char facing = 'U';
+        int[] pos = new int[] { x, y, 'U', x, y, 'U' };
+        int count = 0;
         while (true) {
-            switch (grid[y][x]) {
-                case '^':
-                case '.': {
-                    grid[y][x] = 'X';
-                }
-                case 'X': {
-                    grid[y][x] = 'Y';
-                    break;
-                }
-                case 'Y': {
-                    grid[y][x] = 'Z';
-                    break;
-                }
-                case 'Z': {
-                    grid[y][x] = 'A';
-                    break;
-                }
-                case 'A': {
-                    grid[y][x] = 'B';
-                    break;
-                }
-                case 'B': {
-                    return true;
-                }
-            }
             try {
-                switch (facing) {
-                    case 'U': {
-                        if (grid[y-1][x] == '#') {
-                            facing = 'R';
-                        } else {
-                            y--;
+                count++;
+                for (int i = 0; i < 6; i+=3) {
+                    x = pos[i];
+                    y = pos[i+1];
+                    switch (pos[i+2]) {
+                        case 'U': {
+                            if (grid[y - 1][x] == '#') {
+                                pos[i+2] = 'R';
+                                i-=3;
+                                continue;
+                            } else {
+                                y--;
+                            }
+                            break;
                         }
-                        break;
+                        case 'L': {
+                            if (grid[y][x - 1] == '#') {
+                                pos[i+2] = 'U';
+                                i-=3;
+                                continue;
+                            } else {
+                                x--;
+                            }
+                            break;
+                        }
+                        case 'R': {
+                            if (grid[y][x + 1] == '#') {
+                                pos[i+2] = 'D';
+                                i-=3;
+                                continue;
+                            } else {
+                                x++;
+                            }
+                            break;
+                        }
+                        case 'D': {
+                            if (grid[y + 1][x] == '#') {
+                                pos[i+2] = 'L';
+                                i-=3;
+                                continue;
+                            } else {
+                                y++;
+                            }
+                            break;
+                        }
                     }
-                    case 'L': {
-                        if (grid[y][x-1] == '#') {
-                            facing = 'U';
-                        } else {
-                            x--;
-                        }
-                        break;
+                    pos[i] = x;
+                    pos[i+1] = y;
+                    if (i == 0 && pos[0] == pos[3] && pos[1] == pos[4] && pos[2] == pos[5]) {
+                        return true;
                     }
-                    case 'R': {
-                        if (grid[y][x+1] == '#') {
-                            facing = 'D';
-                        } else {
-                            x++;
-                        }
-                        break;
-                    }
-                    case 'D': {
-                        if (grid[y+1][x] == '#') {
-                            facing = 'L';
-                        } else {
-                            y++;
-                        }
+                    if (count % 2 == 0) {
                         break;
                     }
                 }
@@ -128,22 +125,16 @@ public class Day06 {
     }
     
     private static int loopCount(char[][] grid, int x, int y) {
-        
         int loopCount = 0;
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                char[][] gridCopy = new char[grid.length][grid[i].length];
-                for (int k = 0; k < grid.length; k++) {
-                    gridCopy[k] = grid[k].clone();
-                }
                 if (grid[i][j] == 'X') {
-                    gridCopy[i][j] = '#';
-                } else {
-                    continue;
-                }
-                if (isLoop(gridCopy, x, y)) {
-                    loopCount++;
-                }
+                    grid[i][j] = '#';
+                    if (isLoop(grid, x, y)) {
+                        loopCount++;
+                    }
+                    grid[i][j] = 'X';
+                } 
             }
         }
         
