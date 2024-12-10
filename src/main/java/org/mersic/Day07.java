@@ -33,6 +33,7 @@ public class Day07 {
     
     public static void main(String[] args) throws Exception{
         List<String> input = Files.readAllLines(Path.of(Day07.class.getClassLoader().getResource("day.07.input").toURI()));
+        
         long start = System.currentTimeMillis();
         long partOne = 0;
         long partTwo = 0;
