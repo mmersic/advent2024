@@ -49,18 +49,20 @@ public class Day07 {
     public static void main(String[] args) throws Exception{
         List<String> input = Files.readAllLines(Path.of(Day07.class.getClassLoader().getResource("day.07.input").toURI()));
         
+        long start = System.currentTimeMillis();
         long partOne = 0;
         long partTwo = 0;
-
         for (String line : input) {
             String[] S = line.split(": ");
             long lhs = Long.parseLong(S[0]);
             long[] rhs = Arrays.stream(S[1].split(" ")).mapToLong(Long::parseLong).toArray();
-            partOne += partOneSolve(lhs, 0, rhs, 0);
-            partTwo += partTwoSolve(lhs, 0, rhs, 0);
+            partOne += partOneSolve(lhs, rhs[0], rhs, 1);
+            partTwo += partTwoSolve(lhs, rhs[0], rhs, 1);
         }
-
+        long end = System.currentTimeMillis();
+        
         System.out.println("Day 7 part 1: " + partOne);
         System.out.println("Day 7 part 2: " + partTwo);
+        System.out.println("Day 7 time: " + (end - start) + " ms");
     }
 }
