@@ -2,9 +2,6 @@ package org.mersic;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Day09 {
     
@@ -30,6 +27,8 @@ public class Day09 {
     public static long partTwoChecksum(int[] disk) {
         int sizeNeeded = 0;
         int fileId = -1;
+        int[] memo = new int[10];
+        
         for (int backIndex = disk.length - 1; backIndex >= 0; backIndex--) {
             if (disk[backIndex] != -1) {
                 if (fileId == -1) {
@@ -46,7 +45,7 @@ public class Day09 {
                 continue;
             }
             
-            loop: for (int forwardIndex = 0; forwardIndex+sizeNeeded < disk.length && forwardIndex < backIndex; forwardIndex++) {
+            loop: for (int forwardIndex = memo[sizeNeeded]; forwardIndex+sizeNeeded < disk.length && forwardIndex < backIndex; forwardIndex++) {
                 if (disk[forwardIndex] == -1) {
                     for (int i = 0; i < sizeNeeded && forwardIndex+i < disk.length; i++) {
                         if (disk[forwardIndex+i] != -1) {
@@ -54,6 +53,8 @@ public class Day09 {
                             continue loop;
                         }
                     }
+                    
+                    memo[sizeNeeded] = forwardIndex+sizeNeeded;
                     for (int i = 0; i < sizeNeeded; i++) {
                         disk[forwardIndex+i] = fileId;
                         disk[backIndex+1+i] = -1; 
@@ -102,9 +103,12 @@ public class Day09 {
             }
         }
         
+        long start = System.currentTimeMillis();
         long partOneChecksum = partOneChecksum(diskPart1);
         long partTwoChecksum = partTwoChecksum(diskPart2);
+        long end = System.currentTimeMillis();
         
+        System.out.println("Duration: " + (end - start));
         System.out.println("Day 9 part 1: " + partOneChecksum);
         System.out.println("Day 9 part 2: " + partTwoChecksum);
     }
