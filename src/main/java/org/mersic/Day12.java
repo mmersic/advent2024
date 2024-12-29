@@ -2,11 +2,11 @@ package org.mersic;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Day12 {
 
@@ -130,13 +130,11 @@ public class Day12 {
         char veg = grid[y][x];
         Set<Point> visited = new HashSet<>();
         int perimeterTotal = 0;
-        
-        List<Point> list = new ArrayList<>();
-        list.add(new Point(x, y));
-        
-        while (!list.isEmpty()) {
-            list.sort(pointComparator);
-            Point here = list.removeFirst();
+
+        SortedSet<Point> sortedSet = new TreeSet<>(pointComparator);
+        sortedSet.add(new Point(x, y));
+        while (!sortedSet.isEmpty()) {
+            Point here = sortedSet.removeFirst();
             
             if (visited.contains(here)) {
                 continue;
@@ -146,7 +144,7 @@ public class Day12 {
                 Point other = here.add(deltas[i]);
                 try {
                     if (grid[other.y][other.x] == veg && !visited.contains(other)) {
-                        list.add(other);
+                        sortedSet.add(other);
                     }
                 } catch (Exception e) {}
             }
